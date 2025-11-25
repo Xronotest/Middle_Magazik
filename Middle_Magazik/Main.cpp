@@ -33,6 +33,7 @@ double* priceArr = nullptr;
 bool isStorageCreated = false;
 
 void CreateStorage();
+void BuildStorage();
 void ShowStorage(int mode = 0);
 void AddStorageItem();
 void RemoveStorageItem();
@@ -497,6 +498,39 @@ void CreateStorage()
 	FillArray(countArr, count, storageSize);
 	FillArray(priceArr, price, storageSize);
 
+}
+void BuildStorage()
+{
+	while (true)
+	{
+		std::string choose;
+		AddNewItem();
+		if (storageSize == 0)
+		{
+			system("cls");
+			std::cout << "Вы уверены что хотите оставить склад пустым?\n1 - Да\n2 - Нет\nВвод: ";
+			Getline(choose);
+			if (choose == "1")
+			{
+				break;
+			}
+			else if (choose == "2")
+			{
+				continue;
+			}
+			else
+			{
+				Err();
+				Sleep(1500);
+				continue;
+			}
+		}
+		else
+		{
+			ShowStorage();
+			break;
+		}
+	}
 }
 
 void AddStorageItem() 
@@ -1047,6 +1081,7 @@ void Start()
 					if (isStorageCreated == false)
 					{
 						// пустовато...
+						BuildStorage();
 					}
 					system("cls");
 					ShowSuperAdminMenu();
