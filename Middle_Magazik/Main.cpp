@@ -6,15 +6,19 @@
 
 //------------------------------------- Учётки --------------------------------------------
 size_t userSize = 2;
+size_t staffCount = 1;
 std::string userStatus[3]{ "Maestro Mainer", "Maestro", "Operator" };
 std::string* loginArr = new std::string[userSize]{ "xrono", "operator" };
 std::string* passArr = new std::string[userSize]{ "siege", "six" };
 std::string* statusArr = new std::string[userSize]{ userStatus[0], userStatus[2] };
 std::string currrentStatus;
 
+
 void ChangeUsers();
-void ShowUsers();
+void ShowUsers(int mode = 0);
 void AddNewUser();
+void ChangePass();
+void DeleteUser();
 
 //-----------------------------------------------------------------------------------------
 
@@ -103,7 +107,7 @@ void ChangeUsers()
 		system("cls");
 		if (choose == "1")
 		{
-			
+			AddNewUser();
 		}
 		else if (choose == "2" && userSize > 1)
 		{
@@ -111,7 +115,7 @@ void ChangeUsers()
 		}
 		else if (choose == "3" && userSize > 1)
 		{
-			
+			ChangePass();
 		}
 		else if (choose == "4" && userSize > 1)
 		{
@@ -132,18 +136,35 @@ void ChangeUsers()
 		}
 	}
 }
-void ShowUsers() 
+void ShowUsers(int mode) 
 {
-	system("cls");
-
-	std::cout << "№\t" << std::left << std::setw(12) << "Логин\t\t" << "   Пароль\t\t\t" << "Роль\n";
-
-	for (size_t i = 1; i < userSize; i++)
+	if (mode == 0)
 	{
-		std::cout << i << "\t" << std::left << std::setw(9) << loginArr[i] << "\t\t" << passArr[i] << "\t\t\t"
-			<< statusArr[i] << "\n";
+		system("cls");
+
+		std::cout << "№\t" << std::left << std::setw(12) << "Логин\t\t" << "   Пароль\t\t\t" << "Роль\n";
+
+		for (size_t i = 1; i < userSize; i++)
+		{
+			std::cout << i << "\t" << std::left << std::setw(9) << loginArr[i] << "\t\t" << passArr[i] << "\t\t\t"
+				<< statusArr[i] << "\n";
+		}
+		system("pause");
 	}
-	system("pause");
+	else if (mode == 1)
+	{
+		system("cls");
+
+		std::cout << "№\t" << std::left << std::setw(12) << "Логин\t\t" << "   Пароль\t\t\t" << "Роль\n";
+
+		for (size_t i = 0; i < userSize; i++)
+		{
+			std::cout << i << "\t" << std::left << std::setw(9) << loginArr[i] << "\t\t" << passArr[i] << "\t\t\t"
+				<< statusArr[i] << "\n";
+		}
+		system("pause");
+	}
+	
 }
 void AddNewUser()
 {
@@ -186,7 +207,7 @@ void AddNewUser()
 				exit = false;
 				break;
 			}
-			if (CheckLogin(newPass))
+			if (CheckPass(newPass))
 			{
 				break;
 			}
@@ -200,7 +221,7 @@ void AddNewUser()
 		while (exit)
 		{
 			system("cls");
-			std::cout << "Выбирите роль для нового сотрудника или\" exit \"для выхода: ";
+			std::cout << "Выбирите роль для нового сотрудника или\" exit \"для выхода: \n";
 			std::cout << "1 - Админимстратор\n2 - Сотрудник\nВвод: ";
 			Getline(choose);
 			if (choose == "exit")
@@ -228,8 +249,150 @@ void AddNewUser()
 
 		while (exit)
 		{
-			//================================
+			system("cls");
+			std::cout << "Пользователь: " << newLogin << "\n";
+			std::cout << "Пароль: " << newPass << "\n";
+			std::cout << "Роль: " << newRole << "\n";
+			std::cout << "Подтвердить?\n1 - Да\n2 - Нет\nВвод: ";
+			Getline(choose);
+			if (choose == "1")
+			{
+				userSize++;
+				std::string* loginArrTemp = new std::string[userSize];
+				std::string* passArrTemp = new std::string[userSize];
+				std::string* statusArrTemp = new std::string[userSize];
+
+				FillArray(loginArrTemp, loginArr, userSize - 1);
+				FillArray(passArrTemp, passArr, userSize - 1);
+				FillArray(statusArrTemp, statusArr, userSize - 1);
+
+				loginArrTemp[userSize - 1] = newLogin;
+				passArrTemp[userSize - 1] = newPass;
+				statusArrTemp[userSize - 1] = newRole;
+
+				std::swap(loginArr, loginArrTemp);
+				std::swap(passArr, passArrTemp);
+				std::swap(statusArr, statusArrTemp);
+
+				delete[]loginArrTemp, passArrTemp, statusArrTemp;
+				std::cout << "Идёт подготовка... ";
+				Sleep(2000);
+				std::cout << "Пользователь успешно добавлен!\n\n";
+				Sleep(1500);
+				break;
+			}
+			else if (choose == "2")
+			{
+				std::cout << "Отмена операции!";
+				Sleep(1500);
+			}
+			else
+			{
+				Err();
+			}
 		}
+		if (exit == false)
+		{
+			break;
+		}
+	}
+}
+void ChangePass() 
+{
+	system("cls");
+	std::string newPass1, newPass2, choose;
+	int userId = 0, isAdmin = 0;
+
+	while (true)
+	{
+		if (currrentStatus == userStatus[0])
+		{
+			ShowUsers(1);
+			isAdmin = 0;
+		}
+		else
+		{
+			ShowUsers();
+			isAdmin = 1;
+		}
+		std::cout << "\nВыберете номер пользователя для смены пароля или \"exit\" для выхода: ";
+		Getline(choose);
+		if (choose == "exit")
+		{
+			std::cout << "Отмена операции!";
+			Sleep(1500);
+			break;
+		}
+		else if (IsNumber(choose))
+		{
+			userId = std::stoi(choose);
+			if (userId < isAdmin || userId > userSize - 1)
+			{
+				std::cout << "Такого пользователя нет\n";
+				Sleep(1500);
+				continue;
+			}
+		}
+		else
+		{
+			Err();
+			continue;
+		}
+
+		while (true)
+		{
+			system("cls");
+			if (currrentStatus == userStatus[1] && statusArr[userId] == userStatus[1])
+			{
+				std::cout << "Нельзя менять пароль админу!\n";
+				Sleep(1500);
+				break;
+			}
+
+			std::cout << "Введите новый пароль для пользователя " << loginArr[userId] << ": ";
+			Getline(newPass1);
+			std::cout << "Подтвердите новый пароль для пользователя " << loginArr[userId] << ": ";
+			Getline(newPass2);
+
+			if (CheckPass(newPass1) && CheckPass(newPass2))
+			{
+				if (newPass1 == newPass2 && newPass1 != passArr[userId] && newPass2 != passArr[userId])
+				{
+					passArr[userId] = newPass1;
+					std::cout << "Успешно\n";
+					Sleep(1500);
+					break;
+				}
+				else
+				{
+					std::cout << "Повторите попытку\n";
+					Sleep(1200);
+				}
+			}
+		}
+	}
+}
+void DeleteUser()
+{
+	std::string chooseId, checkPass, choose;
+	int userId, isAdmin = 1;
+
+	while (true)
+	{
+		if (currrentStatus == userStatus[0] && userSize < 2)
+		{
+			std::cout << "Нет пользователей для удаления!\n";
+			Sleep(1500);
+			return;
+		}
+		else if (currrentStatus == userStatus[1] && staffCount < 1)
+		{
+			std::cout << "Нет пользователей для удаления!\n";
+			Sleep(1500);
+			return;
+		}
+
+		//continue
 	}
 }
 
@@ -697,7 +860,7 @@ void AddNewItem()
 				delete[]idArrTemp, nameArrTemp, codeNameArrTemp, countArrTemp, priceArrTemp;
 				std::cout << "Идёт подготовка... ";
 				Sleep(2000);
-				std::cout << "Товар успешно добавлен\n\n";
+				std::cout << "Товар успешно добавлен!\n\n";
 				Sleep(1500);
 				break;
 
@@ -959,7 +1122,7 @@ bool CheckLogin(const std::string& str)
 
 	for (char sym : str)
 	{
-		if (loginSymbols.count(sym))
+		if (!loginSymbols.count(sym))
 		{
 			std::cout << "Некорректный логин\n";
 			Sleep(1500);
@@ -1014,6 +1177,8 @@ bool CheckPass(const std::string& str)
 	else
 	{
 		std::cout << "Минимум 3 символа и 3 цифры";
+		Sleep(1500);
+		return false;
 	}
 	return true;
 }
