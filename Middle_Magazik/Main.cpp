@@ -1269,7 +1269,7 @@ void Selling()
 								Sleep(2000);
 								cash += totalSum;
 								cashIncome += totalSum;
-								//bonusArr[currentId] += totalSum;
+								bonusArr[currentId - 1] += totalSum;
 								system("cls");
 								break;
 							}
@@ -1302,7 +1302,7 @@ void Selling()
 							std::cout << "\nОплата принята.\n\n";
 							Sleep(2000);
 							bankIncome += totalSum;
-							//bonusArr[currentId] += totalSum;
+							bonusArr[currentId - 1] += totalSum;
 							system("cls");
 							break;
 						}
@@ -1541,7 +1541,7 @@ void Start()
 			if (choose == passArr[0])
 			{
 				system("cls");
-				std::cout << "Итоговая прибыль за смену: " << cashIncome + bankIncome;
+				std::cout << "Итоговая прибыль за смену: " << std::fixed << cashIncome + bankIncome;
 				std::cout << "\n\n\n\t\tЗавершение работы...\n\n";
 				Sleep(2000);
 				break;
