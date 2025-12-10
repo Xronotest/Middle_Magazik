@@ -70,6 +70,8 @@ void Selling();
 void CheckArrAppend();
 void PrintCheck(long double& totalSum);
 
+long double Discount(long double& totalSum);
+
 //-----------------------------------------------------------------------------------------
 
 //------------------------------------- Служебные -----------------------------------------
@@ -1231,6 +1233,7 @@ void Selling()
 			}
 
 			PrintCheck(totalSum);
+			totalSum -= Discount(totalSum);
 
 			std::cout << "Подтвердить покупку?\n1 - Да\n2 - Добавить ещё товара\n3 - Отмена\nВвод: ";
 			Getline(choose);
@@ -1450,9 +1453,10 @@ void PrintCheck(long double& totalSum)
 	for (size_t i = 0; i < checkSize; i++)
 	{
 		std::cout << i + 1 << idArrCheck[i] << "\t" << std::left << std::setw(40) << nameArrCheck[i]
-			<< "\t\t" << std::left << std::setw(10) << codeNameArr[i] << "\t" << priceArrCheck[i] << "\t\t" << countArrCheck[i] << "\t" << totalPriceArrCheck[i] << "\n";
+			<< "\t\t" << std::left << std::setw(10) << codeNameArr[i] << "\t" << priceArrCheck[i] << "\t\t" << countArrCheck[i] << "\t" << std::fixed << totalPriceArrCheck[i] << "\n";
 	}
-	std::cout << "\nИтого к оплате: " << std::left << std::setw(10) << totalSum << std::left << std::setw(10) << "\n\n";
+	Discount(totalSum);
+	std::cout << "\nИтого к оплате: " << std::fixed << totalSum - Discount(totalSum) << std::left << std::setw(10) << "\n\n";
 }
 void StorageReturner()
 {
@@ -1472,6 +1476,37 @@ void StorageReturner()
 	priceArrCheck = nullptr;
 	totalPriceArrCheck = nullptr;
 	checkSize = 0;
+}
+long double Discount(long double& totalSum)
+{
+	long double discount = 0.0;
+	bool evil = false, black = false;
+
+	for (size_t i = 0; i < checkSize; i++)
+	{
+		if (countArrCheck[i] == 3)
+		{
+			if (idArrCheck[i] == idArr[0])
+			{
+				evil = true;
+			}
+			else if (idArrCheck[i] == idArr[1])
+			{
+				black = true;
+			}
+		}
+	}
+	if (black && evil)
+	{
+		discount += totalSum * 0.1;
+		std::cout << "Вы собрали набор \"Наблюдатель\" и получили скидку 10%\n";
+	}
+	if (totalSum > 10000000)
+	{
+		discount += totalSum * 0.15;
+		std::cout << "Вы собрали карзину более чем на 10000000 и получили скидку 15%\n";
+	}
+	return discount;
 }
 
 void Start() 
