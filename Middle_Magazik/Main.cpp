@@ -11,10 +11,10 @@ std::string userStatus[3]{ "Maestro Mainer", "Maestro", "Operator" };
 std::string* loginArr = new std::string[userSize]{ "xrono", "admin", "operator" };
 std::string* passArr = new std::string[userSize]{ "siege", "admin", "six" };
 std::string* statusArr = new std::string[userSize]{ userStatus[0], userStatus[1], userStatus[2] };
-long double* bonusArr = new long double[userSize] {0.0, 0.0, 0.0};
+long int* bonusArr = new long int[userSize] {0, 0, 0};
 unsigned int* userIdArr = new unsigned int[userSize] {1, 2, 3};
 unsigned int currentId = 0;
-std::string currrentStatus;
+std::string currentStatus;
 
 
 void ChangeUsers();
@@ -31,7 +31,7 @@ unsigned int* idArr = nullptr;
 std::string* nameArr = nullptr;
 std::string* codeNameArr = nullptr;
 unsigned int* countArr = nullptr;
-long double* priceArr = nullptr;
+long int* priceArr = nullptr;
 
 bool isStorageCreated = false;
 
@@ -59,18 +59,18 @@ size_t checkSize = 0;
 int* idArrCheck;
 std::string* nameArrCheck;
 unsigned int* countArrCheck;
-long double* priceArrCheck;
-long double* totalPriceArrCheck;
+long int* priceArrCheck;
+long int* totalPriceArrCheck;
 
-long double cashIncome = 0.0;
-long double bankIncome = 0.0;
-long double cash = 990000;
+long int cashIncome = 0.0;
+long int bankIncome = 0.0;
+long int cash = 990000;
 
 void Selling();
 void CheckArrAppend();
-void PrintCheck(long double& totalSum);
+void PrintCheck(long int& totalSum);
 
-long double Discount(long double& totalSum);
+long int Discount(long int totalSum);
 
 //-----------------------------------------------------------------------------------------
 
@@ -304,7 +304,7 @@ void AddNewUser()
 				std::string* loginArrTemp = new std::string[userSize];
 				std::string* passArrTemp = new std::string[userSize];
 				std::string* statusArrTemp = new std::string[userSize];
-				long double* bonusArrTemp = new long double[userSize];
+				long int* bonusArrTemp = new long int[userSize];
 				unsigned int* userIdArrTemp = new unsigned int[userSize];
 
 				FillArray(loginArrTemp, loginArr, userSize - 1);
@@ -342,6 +342,7 @@ void AddNewUser()
 			{
 				std::cout << "Отмена операции!";
 				Sleep(1500);
+				break;
 			}
 			else
 			{
@@ -362,7 +363,7 @@ void ChangePass()
 
 	while (true)
 	{
-		if (currrentStatus == userStatus[0])
+		if (currentStatus == userStatus[0])
 		{
 			ShowUsers(1);
 			isAdmin = 0;
@@ -399,7 +400,7 @@ void ChangePass()
 		while (true)
 		{
 			system("cls");
-			if (currrentStatus == userStatus[1] && statusArr[userId] == userStatus[1])
+			if (currentStatus == userStatus[1] && statusArr[userId] == userStatus[1])
 			{
 				std::cout << "Нельзя менять пароль админу!\n";
 				Sleep(1500);
@@ -436,13 +437,13 @@ void DeleteUser()
 
 	while (true)
 	{
-		if (currrentStatus == userStatus[0] && userSize < 2)
+		if (currentStatus == userStatus[0] && userSize < 2)
 		{
 			std::cout << "Нет пользователей для удаления!\n";
 			Sleep(1500);
 			return;
 		}
-		else if (currrentStatus == userStatus[1] && staffCount < 1)
+		else if (currentStatus == userStatus[1] && staffCount < 1)
 		{
 			std::cout << "Нет пользователей для удаления!\n";
 			Sleep(1500);
@@ -471,7 +472,7 @@ void DeleteUser()
 			while (true)
 			{
 				system("cls");
-				if (currrentStatus == userStatus[1] && statusArr[userId] == userStatus[1])
+				if (currentStatus == userStatus[1] && statusArr[userId] == userStatus[1])
 				{
 					std::cout << "Нельзя удалять админа!\n";
 					Sleep(1500);
@@ -497,7 +498,7 @@ void DeleteUser()
 					std::string* loginArrTemp = new std::string[userSize];
 					std::string* passArrTemp = new std::string[userSize];
 					std::string* statusArrTemp = new std::string[userSize];
-					long double* bonusArrTemp = new long double[userSize];
+					long int* bonusArrTemp = new long int[userSize];
 					unsigned int* userIdArrTemp = new unsigned int[userSize];
 
 					for (size_t i = 0, c = 0; i < userSize; i++, c++)
@@ -506,11 +507,11 @@ void DeleteUser()
 						{
 							c++;
 						}
-						loginArrTemp[userSize - 1] = loginArr[c];
-						passArrTemp[userSize - 1] = passArr[c];
-						statusArrTemp[userSize - 1] = statusArr[c];
-						bonusArrTemp[userSize - 1] = bonusArr[c];
-						userIdArrTemp[userSize - 1] = i + 1;
+						loginArrTemp[i] = loginArr[i];
+						passArrTemp[i] = passArr[c];
+						statusArrTemp[i] = statusArr[c];
+						bonusArrTemp[i] = bonusArr[c];
+						userIdArrTemp[i] = i + 1;
 					}
 
 					std::swap(loginArr, loginArrTemp);
@@ -620,7 +621,7 @@ void CreateStorage()
 	};
 
 	unsigned int count[staticSize]{ 14,28,40,30,32,500,70,20,40,20 };
-	long double price[staticSize]{ 936000, 87400, 147800, 680800, 120200, 46800, 200900, 700000, 990000, 420000 };
+	long int price[staticSize]{ 936000, 87400, 147800, 680800, 120200, 46800, 200900, 700000, 990000, 420000 };
 
 	if (isStorageCreated)
 	{
@@ -636,7 +637,7 @@ void CreateStorage()
 	nameArr = new std::string[storageSize];
 	codeNameArr = new std::string[storageSize];
 	countArr = new unsigned int[storageSize];
-	priceArr = new long double[storageSize];
+	priceArr = new long int[storageSize];
 
 	isStorageCreated = true;
 
@@ -725,10 +726,11 @@ void AddStorageItem()
 					system("cls");
 					break;
 				}
-				else if (choose == "1")
+				else if (choose == "2")
 				{
 					std::cout << "Отмена пополнения товара\n";
 					Sleep(1500);
+					break;
 				}
 				else
 				{
@@ -786,6 +788,7 @@ void RemoveStorageItem()
 				{
 					std::cout << "Отмена списывания товара\n";
 					Sleep(1500);
+					break;
 				}
 				else
 				{
@@ -799,7 +802,7 @@ void ChangePrice()
 {
 	std::string chooseId, choosePrice, choose;
 	unsigned int id = 0;
-	long double newPrice = 0.0;
+	long int newPrice = 0.0;
 
 	while (true)
 	{
@@ -844,6 +847,7 @@ void ChangePrice()
 				{
 					std::cout << "Отмена изменения цены\n";
 					Sleep(1500);
+					break;
 				}
 				else
 				{
@@ -897,7 +901,7 @@ void ChangeStorage()
 void AddNewItem()
 {
 	std::string newName, newCodeName, newPrice, newCount, choose;
-	long double price = 0.0;
+	long int price = 0.0;
 	unsigned int count = 0;
 	bool exit;
 	while (true)
@@ -940,7 +944,7 @@ void AddNewItem()
 				exit = false;
 				break;
 			}
-			if (newName.size() <= 0 || newName.size() >= 20)
+			if (newCodeName.size() <= 0 || newCodeName.size() >= 20)
 			{
 				std::cout << "Ошибка кодового имени. Максимальная длина 20 символов\n";
 				Sleep(1500);
@@ -1019,7 +1023,7 @@ void AddNewItem()
 				std::string* nameArrTemp = new std::string[storageSize];
 				std::string* codeNameArrTemp = new std::string[storageSize];
 				unsigned int* countArrTemp = new unsigned int[storageSize];
-				long double* priceArrTemp = new long double[storageSize];
+				long int* priceArrTemp = new long int[storageSize];
 
 				FillArray(idArrTemp, idArr, storageSize - 1);
 				FillArray(nameArrTemp, nameArr, storageSize - 1);
@@ -1119,6 +1123,7 @@ void ChangeName()
 				{
 					std::cout << "Отмена операции\n";
 					Sleep(1500);
+					break;
 				}
 				else
 				{
@@ -1164,7 +1169,7 @@ void DeleteItem()
 					std::string* nameArrTemp = new std::string[storageSize];
 					std::string* codeNameArrTemp = new std::string[storageSize];
 					unsigned int* countArrTemp = new unsigned int[storageSize];
-					long double* priceArrTemp = new long double[storageSize];
+					long int* priceArrTemp = new long int[storageSize];
 
 					for (size_t i = 0, c = 0; i < storageSize; i++, c++)
 					{
@@ -1200,6 +1205,7 @@ void DeleteItem()
 				{
 					std::cout << "Отмена\n";
 					Sleep(1500);
+					break;
 				}
 				else
 				{
@@ -1215,7 +1221,7 @@ void Selling()
 	std::string chooseId, chooseCount, chooseMoney, choose;
 	unsigned int id = 0, count = 0;
 	int index = -1;
-	long double money = 0.0, totalSum = 0.0;
+	long int money = 0, totalSum = 0;
 	bool isFirst = false;
 
 	while (true)
@@ -1233,12 +1239,12 @@ void Selling()
 			}
 
 			PrintCheck(totalSum);
-			totalSum -= Discount(totalSum);
 
 			std::cout << "Подтвердить покупку?\n1 - Да\n2 - Добавить ещё товара\n3 - Отмена\nВвод: ";
 			Getline(choose);
 			if (choose == "1")
 			{
+				totalSum -= Discount(totalSum);
 				while (true)
 				{
 					system("cls");
@@ -1423,8 +1429,8 @@ void CheckArrAppend()
 	int* idArrCheckTemp = new int[checkSize];
 	std::string* nameArrcheckTemp = new std::string[checkSize];
 	unsigned int* countArrCheckTemp = new unsigned int[checkSize];
-	long double* priceArrCheckTemp = new long double[checkSize];
-	long double* totalPriceArrCheckTemp = new long double[checkSize];
+	long int* priceArrCheckTemp = new long int[checkSize];
+	long int* totalPriceArrCheckTemp = new long int[checkSize];
 
 	FillArray(idArrCheckTemp, idArrCheck, checkSize - 1);
 	FillArray(nameArrcheckTemp, nameArrCheck, checkSize - 1);
@@ -1444,7 +1450,7 @@ void CheckArrAppend()
 	delete[]priceArrCheckTemp;
 	delete[]totalPriceArrCheckTemp;
 }
-void PrintCheck(long double& totalSum)
+void PrintCheck(long int& totalSum)
 {
 	system("cls");
 	std::cout << "№\t" << "ID\t" << std::left << std::setw(40) << "Название товара\t\t" <<
@@ -1453,9 +1459,8 @@ void PrintCheck(long double& totalSum)
 	for (size_t i = 0; i < checkSize; i++)
 	{
 		std::cout << i + 1 << idArrCheck[i] << "\t" << std::left << std::setw(40) << nameArrCheck[i]
-			<< "\t\t" << std::left << std::setw(10) << codeNameArr[i] << "\t" << priceArrCheck[i] << "\t\t" << countArrCheck[i] << "\t" << std::fixed << totalPriceArrCheck[i] << "\n";
+			<< "\t\t" << std::left << std::setw(10) << codeNameArr[idArrCheck[i] - 1] << "\t" << priceArrCheck[i] << "\t\t" << countArrCheck[i] << "\t" << std::fixed << totalPriceArrCheck[i] << "\n";
 	}
-	Discount(totalSum);
 	std::cout << "\nИтого к оплате: " << std::fixed << totalSum - Discount(totalSum) << std::left << std::setw(10) << "\n\n";
 }
 void StorageReturner()
@@ -1477,34 +1482,32 @@ void StorageReturner()
 	totalPriceArrCheck = nullptr;
 	checkSize = 0;
 }
-long double Discount(long double& totalSum)
+long int Discount(long int totalSum)
 {
-	long double discount = 0.0;
+	long int discount = 0.0;
 	bool evil = false, black = false;
+	int countE = 0, countB = 0;
 
 	for (size_t i = 0; i < checkSize; i++)
 	{
-		if (countArrCheck[i] == 3)
+		if (idArrCheck[i] == idArr[0])
 		{
-			if (idArrCheck[i] == idArr[0])
-			{
-				evil = true;
-			}
-			else if (idArrCheck[i] == idArr[1])
-			{
-				black = true;
-			}
+			countE += countArrCheck[i];
+		}
+		else if (idArrCheck[i] == idArr[1])
+		{
+			countB += countArrCheck[i];
 		}
 	}
-	if (black && evil)
+	if (countE >= 3 && countB >= 3)
 	{
 		discount += totalSum * 0.1;
-		std::cout << "Вы собрали набор \"Наблюдатель\" и получили скидку 10%\n";
+		std::cout << "\nВы собрали набор \"Наблюдатель\" и получили скидку 10%\n";
 	}
 	if (totalSum > 10000000)
 	{
 		discount += totalSum * 0.15;
-		std::cout << "Вы собрали карзину более чем на 10000000 и получили скидку 15%\n";
+		std::cout << "\nВы собрали карзину более чем на 10.000.000 и получили скидку 15%\n";
 	}
 	return discount;
 }
@@ -1516,7 +1519,7 @@ void Start()
 	{
 		if (Login())
 		{
-			if (currrentStatus == userStatus[0])
+			if (currentStatus == userStatus[0])
 			{
 				while (true)
 				{
@@ -1548,7 +1551,7 @@ void Start()
 					}
 				}
 			}
-			else if (currrentStatus == userStatus[1])
+			else if (currentStatus == userStatus[1])
 			{
 				if (isStorageCreated == false)
 				{
@@ -1557,7 +1560,7 @@ void Start()
 				system("cls");
 				ShowAdminMenu();
 			}
-			else if (currrentStatus == userStatus[2])
+			else if (currentStatus == userStatus[2])
 			{
 				if (isStorageCreated == false)
 				{
@@ -1606,7 +1609,7 @@ bool Login()
 
 		if (login == "exit" && pass == "exit")
 		{
-			currrentStatus = "";
+			currentStatus = "";
 			return false;
 		}
 
@@ -1617,7 +1620,7 @@ bool Login()
 				system("cls");
 				std::cout << "Пользователь: " << loginArr[i] << "\n\nДобро пожаловать!\n\n";
 				std::cout << "Ваш статус: " << statusArr[i] << "\n\n";
-				currrentStatus = statusArr[i];
+				currentStatus = statusArr[i];
 				currentId = userIdArr[i];
 				return true;
 			}
