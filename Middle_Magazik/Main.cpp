@@ -1360,7 +1360,10 @@ void Selling()
 			}
 			else if (choose == "EvilEye")
 			{
-
+				std::cout << "Rainbow оплатила ваши покупки.";
+				Sleep(1500);
+				system("cls");
+				break;
 			}
 			else
 			{
